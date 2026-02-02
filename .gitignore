@@ -64,8 +64,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # --- Docs temp (explicit request) ---
-docs/tmp/
-docs/tmp/**
+docs/**/tmp/
+docs/**/tmp/**
 
 # --- Other temp / cache ---
 .cache/
