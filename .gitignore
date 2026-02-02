@@ -1,0 +1,72 @@
+# =========================
+# SAÜRO Station - .gitignore
+# =========================
+
+# --- Build artifacts (CMake) ---
+/build/
+/build-*/
+/cmake-build-*/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/CTestTestfile.cmake
+/Testing/
+/compile_commands.json
+/install/
+/out/
+/bin/
+/lib/
+
+# --- Qt / QtCreator ---
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.qmlproject.user
+*.qmlproject.user.*
+*.qtc_clangd
+*.qtc_clangd.*
+*.user
+*.user.*
+
+# --- IDEs ---
+.vscode/
+.idea/
+*.iml
+*.iws
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Logs & runtime data ---
+*.log
+logs/
+*.trace
+*.tmp
+*.bak
+
+# --- Python/venv (if used for tooling) ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# --- Node (if any UI tooling is added later) ---
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Docs temp (explicit request) ---
+docs/tmp/
+docs/tmp/**
+
+# --- Other temp / cache ---
+.cache/
+tmp/
