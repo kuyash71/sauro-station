@@ -50,22 +50,22 @@ logs/
 *.tmp
 *.bak
 
-# --- Python/venv (if used for tooling) ---
+# --- Python/venv ---
 .venv/
 venv/
 __pycache__/
 *.pyc
 
-# --- Node (if any UI tooling is added later) ---
+# --- Node ---
 node_modules/
 dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# --- Docs temp (explicit request) ---
-docs/**/tmp/
-docs/**/tmp/**
+# --- Docs temp ---
+docs/tmp/
+docs/tmp/**
 
 # --- Other temp / cache ---
 .cache/
