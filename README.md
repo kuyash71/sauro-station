@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/ulak-gcs-banner.png" alt="ULAK GCS banner">
+</p>
+
 # ULAK GCS
 
 **ULAK GCS** is a Ground Control Station (GCS) application originally developed for the SAÜRO rotary-wing UAV project.
