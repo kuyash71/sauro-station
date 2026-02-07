@@ -1,14 +1,14 @@
-# SAÜRO Station — Architecture
+# ULAK GCS — Architecture
 
-**Document purpose:** Define the architecture of the **SAÜRO Station (Ground Control Station / GCS)** application:  
+**Document purpose:** Define the architecture of the **ULAK GCS (Ground Control Station)** application:  
 modules, responsibilities, data flows, safety/observability principles, and extension points.
 
-This document is aligned with the broader SAÜRO UAV software design, which emphasizes:
+This document is aligned with the broader SAÜRO UAV software designs, which emphasizes:
 
 - modular architecture,
 - state-machine (FSM) based mission execution,
 - traceable, observable mission progress,
-- and safety-aware behavior. fileciteturn1file10L6-L28
+- and safety-aware behavior.
 
 ---
 
@@ -34,14 +34,14 @@ The station is **not**:
 Those run on:
 
 - **Flight Controller** (e.g., Pixhawk / ArduPilot): critical flight stabilization and modes.
-- **Companion Computer** (e.g., Raspberry Pi): mission logic + perception + optional streaming. fileciteturn1file9L19-L33
+- **Companion Computer** (e.g., Raspberry Pi): mission logic, perception, and optional streaming services.
 
 ### 1.3 Communication model (hybrid)
 
 The system design uses a hybrid communication model:
 
 - **Telemetry**: Flight Controller → Station (direct, reliable)
-- **Mission/perception/camera**: Companion Computer → Station (operator visibility) fileciteturn1file8L17-L24
+- **Mission/perception/camera**: Companion Computer → Station (operator visibility)
 
 ---
 
@@ -53,8 +53,7 @@ The system design uses a hybrid communication model:
 flowchart LR
   OP[Operator]
 
-  subgraph STATION[SAÜRO Station (This Repo)]
-    UI[UI Layer]
+  subgraph STATION[ULAK GCS (Station)]    UI[UI Layer]
     APP[Application Core]
     BUS[Event Bus]
     LOG[Logger & Recorder]
@@ -64,7 +63,7 @@ flowchart LR
     MIF[Mission/Perception Adapter]
     STR[Stream Manager]
     CMD[Command Gateway]
-    SAFE[Safety UI + Constraints]
+    SAFE[Safety Layer (UI + Constraints)]
   end
 
   subgraph FC[Flight Controller]
@@ -120,7 +119,7 @@ flowchart LR
   - perception outputs (targets/alignment/confidence),
   - streaming view (if enabled),
   - safety events/timeline.
-- Provides operator actions: connect/disconnect, start/stop mission, parameter override, safe termination.
+- Provides operator actions: connect/disconnect, start/stop mission, parameter override, safe safe termination (e.g., abort / RTL via Panic Button).
 
 ### 3.2 Application Core
 
@@ -143,12 +142,12 @@ flowchart LR
 - Consumes the data types described for the station:
   - mission state (active state + progress),
   - perception outputs (target/alignment/confidence),
-  - system health warnings and failsafe events. fileciteturn1file7L4-L13
+  - system health warnings and failsafe events.
 - Publishes them to the Event Bus.
 
 ### 3.5 Stream Manager
 
-The design supports selectable **streaming modes** to balance performance vs observability: fileciteturn1file7L24-L43
+The design supports selectable **streaming modes** to balance performance vs observability:
 
 - **OFF**: no stream delivered to the station
 - **OUTPUTS_ONLY**: send processed detection results only
@@ -167,7 +166,7 @@ Station accepts a limited set of operator commands:
 
 - start / stop mission,
 - parameter override (e.g., INFINITE_LOOP_COUNT),
-- operator intervention / safe termination. fileciteturn1file8L25-L37
+- operator intervention / safe termination.
 
 Command Gateway responsibilities:
 
@@ -263,6 +262,7 @@ Safety events are classified into three severity levels:
 ### 6.2 Station-side constraints
 
 Even if other components also validate commands, the station must gate obvious unsafe actions:
+This guarantees a deterministic and reviewable last-resort behavior across all deployments.
 
 - require explicit confirmation for mission termination commands,
 - prevent contradictory commands during critical phases (e.g., disallow “start mission” when not connected),
@@ -357,16 +357,6 @@ Planned/expected extension points:
 - multi-vehicle session support,
 - replay mode (logs + recorded stream),
 - new panels: checklists, map overlays, payload control UI.
-
----
-
-## 9. Traceability
-
-This station architecture directly supports the station responsibilities listed in the SAÜRO design:
-
-- Mission state + perception outputs delivered to station
-- Station command set (start/stop, overrides, safe termination)
-- Safety events observable and logged fileciteturn1file8L25-L37
 
 ---
 

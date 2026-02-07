@@ -1,20 +1,24 @@
-# SAÜRO Station
+# ULAK GCS
 
-**SAÜRO Station** is a Ground Control Station (GCS) application for the SAÜRO rotary-wing UAV project.
-It provides a single operator-friendly interface to **monitor telemetry**, **observe mission/perception outputs**, and **issue controlled commands** to the system.
+**ULAK GCS** is a Ground Control Station (GCS) application originally developed for the SAÜRO rotary-wing UAV project.
+After seeing the potential of the station-side architecture, the GCS was separated into this standalone repository to
+serve a broader **ArduPilot**-oriented ecosystem.
 
-> Scope note: This repository focuses on the **station / GCS side**. Flight control runs on the flight controller (e.g., Pixhawk/ArduPilot),
+ULAK GCS focuses on an operator-friendly UI to **monitor telemetry**, **observe mission/perception outputs**, and **issue controlled commands**,
+with a plugin-friendly structure planned to support extensibility.
+
+> **Scope:** This repository covers the **station (GCS) side** only. Flight control runs on the flight controller (e.g., Pixhawk/ArduPilot),
 > while mission logic and perception may run on a companion computer. The station integrates these data streams into one UI.
 
 ---
 
 ## Why this exists
 
-In the SAÜRO system, communication is intentionally **hybrid**:
+In the ULAK GCS system, communication is intentionally **hybrid**:
 
 - **Critical flight telemetry** (position, altitude, speed, system status) is expected to reach the station reliably through the flight controller link.
 - **Mission state + perception outputs + camera streaming** are expected to be delivered from the companion computer to the station, so the operator can
-  observe mission progress and intervene when required. fileciteturn1file8L17-L24
+  observe mission progress and intervene when required.
 
 This repo implements the station side of that design.
 
@@ -25,13 +29,16 @@ This repo implements the station side of that design.
 - 📡 **Telemetry dashboard** (connection status, health, key flight metrics)
 - 🧭 **Mission state view** (active FSM state, progress, last transition reason)
 - 🔍 **Perception panel** (target info, alignment outputs, confidence levels)
-- 🎥 **Camera streaming modes** to balance performance vs observability: fileciteturn1file7L24-L43
+- 🎥 **Camera streaming modes** to balance performance vs observability:
   - No stream (max performance)
   - Processed outputs only
   - Compressed live stream (H.264/H.265, FPS/bitrate)
   - (Optional) Full/raw stream for debugging (if enabled)
-- 🛡️ **Safety & failsafe visibility** (events, warnings, operator intervention hooks) fileciteturn1file8L4-L9
+- 🛡️ **Safety & failsafe visibility** (events, warnings, operator intervention hooks)
 - 📝 **Structured logging** (session logs, event timeline)
+- 🧩 Plugin-friendly architecture (Lua + JSON, WIP)
+  - Lua is used for runtime plugin logic
+  - JSON is used for declarative configuration and policy enforcement
 
 ---
 
@@ -252,4 +259,4 @@ See `LICENSE` for details.
 
 ## Acknowledgements
 
-This station design follows the SAÜRO software design approach emphasizing a **modular**, **traceable**, and **safety-aware** architecture. fileciteturn1file10L6-L28
+This station design follows the ULAK software design approach emphasizing a **modular**, **traceable**, and **safety-aware** architecture.
