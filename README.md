@@ -47,14 +47,28 @@ This repo implements the station side of that design.
 │   └── 📁 themes/
 │       └── dark.qss
 ├── 📁 config/                 # App configuration (ports, endpoints, UI presets)
-│   └── settings.json
-├── 📁 docs/                   # Documentation
+│   ├── 📁 profiles/
+│   │   ├── aggressive.json # Aggressive profile for more user responsibility and less system intervention
+│   │   ├── default.json # Default profile
+│   │   ├── safe.json # Safe profile for less user responsibility and more system intervention
+│   │   └── README.md # README about how to customize your own profile
+│   ├── gcs_defaults.json # Default of GCS Sim
+│   └── settings.json # Settings of GCS
+├── 📁 docs/
+|   ├── 📁 adr/
+│   │   ├── 001-customizable-gcs-vision.md    # Customizable GCS behaviour
+│   │   ├── 002-gcs-profiles.md # GCS Profiles and matching the Profile specs with w/e/c messages
+│   │   ├── 003-panic-button-system.md # Panic Button --> Triggers Status: RTL
+│   │   └── ...
 │   ├── 📁 design/
 │   │   ├── Architecture.md    # System & station architecture
 │   │   ├── checklist.md
 │   │   └── PROTOCOL.md
-│   └── 📁 tmp/
-│       └── test.txt
+│   └── 📁 spec/
+│       ├── ecosystem.md # Answers the question: Which parts of the GCS can be customizable?
+│       ├── exception-handling.md # Definitions of w/e/c messages, default actions and profile system
+│       ├── panic-button.md # When you can "Panic" and what "Panic" does?
+│       └── polisher.md # TBD
 ├── 📁 src/                    # Application source code
 │   ├── 📁 app/
 │   │   ├── CMakeLists.txt
@@ -70,7 +84,14 @@ This repo implements the station side of that design.
 │   │   ├── AppConfig.cpp
 │   │   ├── AppConfig.h
 │   │   ├── AppController.cpp
-│   │   └── AppController.h
+│   │   ├── AppController.h
+│   │   ├── ConfigLoader.cpp
+│   │   ├── ExceptionClassifier.cpp
+│   │   ├── ExceptionClassifier.h
+│   │   ├── PanicManager.cpp
+│   │   ├── PanicManager.h
+│   │   ├── ProfileManager.cpp
+│   │   └── ProfileManager.h
 │   ├── 📁 models/
 │   │   ├── GcsCommand.h
 │   │   ├── MissionState.h
@@ -91,11 +112,27 @@ This repo implements the station side of that design.
 ├── .clang-format
 ├── .gitignore
 ├── CMakeLists.txt             # CMake build entry
-├── LICENSE
+├── LICENSE # Apache License Version 2.0
 └── README.md
 ```
 
 ---
+
+## Design Decisions
+
+- Customizable GCS (Profile System and Behaviour Configuration)
+- Panic Button => RTL (Cannot be Changed via Customization)
+- Exception Levels: WARN / ERROR / CRITICAL (Levels of 3, fully customizable)
+- Policy-First approach on project
+- Default Profile is non-removable via GUI
+- Panic Button behavior is fixed to RTL and independent of profiles
+- Not tightly coupled to the ArduPilot UI ecosystem
+
+## Non-Goals
+
+- Not a Full QGC Replacement
+- Not a cloud multi-user panel
+- No manual flight control
 
 ## Prerequisites
 
@@ -138,7 +175,7 @@ cmake --build build --config Release
 or on Windows:
 
 ```powershell
-.uild\Release\sauro_station.exe
+.build\Release\sauro_station.exe
 ```
 
 ---
@@ -156,6 +193,14 @@ Typical parameters include:
 See **Architecture** for a clear separation of responsibilities and data flow:
 
 - 📖 `docs/design/Architecture.md`
+
+---
+
+## Polisher (WIP)
+
+- Parameters defined via JSON
+- Plugin system planned via Lua
+- Final API will be designed after GUI stabilization
 
 ---
 
@@ -183,6 +228,10 @@ See **Architecture** for a clear separation of responsibilities and data flow:
 
 ---
 
+## Screenshots
+
+Screenshots will be added on this section when available
+
 ## Contributing
 
 PRs are welcome. Please:
@@ -196,7 +245,8 @@ PRs are welcome. Please:
 
 ## License
 
-TBD (choose and add a LICENSE file).
+Apache License, Version 2.0.
+See `LICENSE` for details.
 
 ---
 

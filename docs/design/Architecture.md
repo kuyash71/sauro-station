@@ -239,7 +239,7 @@ stateDiagram-v2
   MISSION_COMPLETED --> MISSION_IDLE
 ```
 
-The broader system uses an FSM approach to ensure deterministic mission execution and safe transitions. fileciteturn1file9L23-L33
+The broader system uses an FSM approach to ensure deterministic mission execution and safe transitions.
 
 ---
 
@@ -247,11 +247,18 @@ The broader system uses an FSM approach to ensure deterministic mission executio
 
 ### 6.1 Safety events
 
-The design includes a safety monitor that publishes safety events to multiple consumers: fileciteturn1file8L4-L9
+The design includes a safety monitor that publishes safety events to multiple consumers:
 
 - station UI (operator visibility),
 - mission manager (automatic safe transitions),
 - logger.
+
+Safety events are classified into three severity levels:
+
+- **WARN**: Non-blocking issues that do not directly affect flight safety.
+- **ERROR**: Blocking or potentially dangerous conditions that may require operator
+  confirmation or timed intervention.
+- **CRITICAL**: Immediate safety threats requiring automatic action.
 
 ### 6.2 Station-side constraints
 
@@ -261,6 +268,14 @@ Even if other components also validate commands, the station must gate obvious u
 - prevent contradictory commands during critical phases (e.g., disallow “start mission” when not connected),
 - throttle repeated commands.
 
+#### 6.2.a Panic Button
+
+The station provides a global **Panic Button** that is always accessible to the operator.
+
+- The Panic Button action is **fixed to RTL (Return-To-Launch)**.
+- This behavior is independent of profiles and cannot be overridden via customization.
+- Panic is designed as a last-resort, deterministic safety action.
+
 ### 6.3 Failsafe observability
 
 When failsafe triggers, the station should make it unmissable:
@@ -268,6 +283,18 @@ When failsafe triggers, the station should make it unmissable:
 - persistent banner + audible alert (optional),
 - highlighted timeline entry,
 - recommended operator action message.
+
+## 6.4 Policy & Behavior Model
+
+The station follows a **policy-first behavior model**.
+
+- Station behavior is driven by external configuration files (profiles).
+- Profiles map system events to severity levels and actions.
+- The default profile is shipped with the station and is non-removable via the UI.
+  (It may only be altered at the filesystem level by the user.)
+
+This approach allows different teams to tune the station's tolerance and intervention
+strategy without modifying core code.
 
 ---
 
